@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GlobalController extends GetxController {
@@ -8,10 +9,9 @@ class GlobalController extends GetxController {
   void addition() {
     x++;
   }
-  // subtraction function 
+
+  // subtraction function
   void subtraction() {
     x--;
   }
-  // dilog box to add expenses 
-  
 }
