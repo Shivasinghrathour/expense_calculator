@@ -29,7 +29,7 @@ class AddExpenseController extends GetxController {
       // add expense button
       confirm: ElevatedButton(
           onPressed: () {
-            authController.getExpenses();
+            authController.addExpenses();
           },
           child: const Padding(
             padding: EdgeInsets.only(top: 10, bottom: 10),

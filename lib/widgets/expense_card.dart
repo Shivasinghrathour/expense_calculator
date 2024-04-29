@@ -1,7 +1,9 @@
+import 'package:expense_calculator/model/expense_model.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseCard extends StatelessWidget {
-  const ExpenseCard({super.key});
+  final String money;
+  const ExpenseCard({super.key, required this.money});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class ExpenseCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "50",
+                  Text(
+                    money,
                     style: TextStyle(
                         fontSize: 34,
                         color: Colors.black,

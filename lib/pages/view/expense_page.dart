@@ -1,5 +1,8 @@
+import 'package:expense_calculator/model/expense_model.dart';
 import 'package:expense_calculator/pages/controller/add_expense_dialog_box.dart';
+import 'package:expense_calculator/pages/controller/auth_controller.dart';
 import 'package:expense_calculator/pages/controller/global_controller.dart';
+import 'package:expense_calculator/widgets/expense_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +13,7 @@ class ExpensePage extends StatelessWidget {
   Widget build(BuildContext context) {
     GlobalController globalController = Get.put(GlobalController());
     AddExpenseController addExpenseController = Get.put(AddExpenseController());
+    AuthController authController = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Your Expenses"),
@@ -68,51 +72,10 @@ class ExpensePage extends StatelessWidget {
 
             SizedBox(
               height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: addExpenseController.expanses.length,
-                itemBuilder: (context, index) {
-                  return ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Container(
-                          height: 70,
-                          padding: const EdgeInsets.only(left: 40),
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple[200],
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Obx(
-                                  () => Text(
-                                    addExpenseController.amountController.text,
-                                    style: const TextStyle(
-                                        fontSize: 34,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.delete_outline_outlined,
-                                      color: Colors.black,
-                                      size: 38,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              child: ExpenseCard(
+                money: "4645",
               ),
-            )
+            ),
           ],
         ),
       ),

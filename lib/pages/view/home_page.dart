@@ -1,5 +1,5 @@
 import 'package:expense_calculator/pages/controller/global_controller.dart';
-import 'package:expense_calculator/pages/expense_page.dart';
+import 'package:expense_calculator/pages/view/expense_page.dart';
 import 'package:expense_calculator/widgets/result_area_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
