@@ -7,7 +7,6 @@ class AddExpenseController extends GetxController {
   final TextEditingController amountController = TextEditingController();
   AuthController authController = Get.put(AuthController());
   void addExpenseDialogBox() {
-    final double amount = double.tryParse(amountController.text) ?? 0.0;
     Get.defaultDialog(
       title: "Add Expense",
       titleStyle: TextStyle(
@@ -53,10 +52,4 @@ class AddExpenseController extends GetxController {
     );
   }
   // function for adding expense
-
-  void addExpansesfun() {
-    var ex = amountController.text;
-    expanses.add(ex);
-    print(expanses);
-  }
 }

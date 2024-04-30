@@ -1,5 +1,6 @@
 import 'package:expense_calculator/firebase_options.dart';
 import 'package:expense_calculator/pages/auth/signup_page.dart';
+import 'package:expense_calculator/pages/view/expense_page.dart';
 import 'package:expense_calculator/pages/view/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _MyAppState extends State<MyApp> {
       title: "Expense Tracker",
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: const SignupPage(),
+      home: const ExpensePage(),
     );
   }
 }

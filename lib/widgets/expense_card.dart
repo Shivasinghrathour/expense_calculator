@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 class ExpenseCard extends StatelessWidget {
   final String money;
-  const ExpenseCard({super.key, required this.money});
+  final ExpensesModel expensesModel;
+  const ExpenseCard(
+      {super.key, required this.money, required this.expensesModel});
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -24,7 +26,7 @@ class ExpenseCard extends StatelessWidget {
                 children: [
                   Text(
                     money,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 34,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),

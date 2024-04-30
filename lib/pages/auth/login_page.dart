@@ -10,15 +10,15 @@ class LoginPage extends StatelessWidget {
     AuthController authController = Get.put(AuthController());
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: const Text("Login"),
         backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Column(
           children: [
-            SizedBox(height: 40),
-            Center(
+            const SizedBox(height: 40),
+            const Center(
               child: Text(
                 "Login to continue",
                 style: TextStyle(fontSize: 40),
@@ -27,24 +27,24 @@ class LoginPage extends StatelessWidget {
             ),
             TextFormField(
               controller: authController.email,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Email",
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextFormField(
               controller: authController.pass,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Password",
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ElevatedButton(
                 onPressed: () {
-                  authController.Login();
+                  authController.login();
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
+                child: const Padding(
+                  padding: EdgeInsets.all(10),
                   child: Text(
                     "Sign up",
                     style: TextStyle(fontSize: 22),
