@@ -5,11 +5,13 @@ class ExpenseCard extends StatelessWidget {
   final String money;
   final ExpensesModel expensesModel;
   final VoidCallback ontap;
+  final VoidCallback onedit;
   const ExpenseCard({
     super.key,
     required this.money,
     required this.expensesModel,
     required this.ontap,
+    required this.onedit,
   });
 
   @override
@@ -36,13 +38,26 @@ class ExpenseCard extends StatelessWidget {
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
-                  IconButton(
-                      onPressed: ontap,
-                      icon: const Icon(
-                        Icons.delete_outline_outlined,
-                        color: Colors.black,
-                        size: 38,
-                      ))
+                  Row(
+                    children: [
+                      // delte button
+                      IconButton(
+                          onPressed: ontap,
+                          icon: const Icon(
+                            Icons.delete_outline_outlined,
+                            color: Colors.black,
+                            size: 38,
+                          )),
+                      // edit button
+                      IconButton(
+                          onPressed: onedit,
+                          icon: const Icon(
+                            Icons.edit_outlined,
+                            color: Colors.black,
+                            size: 38,
+                          )),
+                    ],
+                  )
                 ],
               ),
             ),

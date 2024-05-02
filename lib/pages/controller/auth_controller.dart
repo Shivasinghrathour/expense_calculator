@@ -17,6 +17,7 @@ class AuthController extends GetxController {
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
   TextEditingController user = TextEditingController();
+  TextEditingController editexpense = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
@@ -116,20 +117,30 @@ class AuthController extends GetxController {
 
   StreamSubscription? _subscription;
 
+  Future<void> currentuser() async {
+    auth.authStateChanges().listen((event) {
+      if (event != null) {
+        _subscription = _firestore
+            .collection("user")
+            .doc(_auth.currentUser!.uid)
+            .collection("expenses")
+            .snapshots()
+            .listen((snapshot) {
+          final expenses = snapshot.docs
+              .map((doc) => ExpensesModel.fromJson(doc.data()))
+              .toList();
+          expensesList.assignAll(expenses);
+        });
+      } else {
+        Get.to(() => const LoginPage());
+      }
+    });
+  }
+
   @override
   void onInit() {
     super.onInit();
-    _subscription = _firestore
-        .collection("user")
-        .doc(_auth.currentUser!.uid)
-        .collection("expenses")
-        .snapshots()
-        .listen((snapshot) {
-      final expenses = snapshot.docs
-          .map((doc) => ExpensesModel.fromJson(doc.data()))
-          .toList();
-      expensesList.assignAll(expenses);
-    });
+    currentuser();
   }
 
   @override
@@ -154,16 +165,29 @@ class AuthController extends GetxController {
         .set(expense.toJson());
     amountController.clear();
   }
+// delete expenses
 
-  Future<void> deleteExpenses(String finalUID) async {
-    final finalUID = DateTime.now().millisecondsSinceEpoch.toString();
-
+  Future<void> deleteExpenses({required String finalUID}) async {
     await _firestore
         .collection("user")
-        .doc(_auth.currentUser!.uid)
+        .doc(auth.currentUser!.uid)
         .collection("expenses")
         .doc(finalUID)
         .delete();
+    print("after calling funtion $finalUID");
+  }
+
+  // edit expenses
+  Future<void> editExpenses(
+      {required String finalUID, required ExpensesModel expenseModel}) async {
+    await _firestore
+        .collection("user")
+        .doc(auth.currentUser!.uid)
+        .collection("expenses")
+        .doc(finalUID)
+        .update({
+      "expenses": editexpense.text,
+    });
     print("after calling funtion $finalUID");
   }
 }
