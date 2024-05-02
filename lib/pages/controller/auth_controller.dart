@@ -6,8 +6,10 @@ import 'package:expense_calculator/pages/view/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
+  var uuid = const Uuid();
   final ExpensesModel exp = Get.put(ExpensesModel());
   Rx<ExpensesModel> expensesModel = ExpensesModel().obs;
 
@@ -141,6 +143,7 @@ class AuthController extends GetxController {
     final expense = ExpensesModel(
       expenses: amountController.text,
       userName: user.text,
+      expenseID: DateTime.now().millisecondsSinceEpoch.toString(),
     );
     print("Adding expense: ${expense.expenses}");
     await _firestore
@@ -150,5 +153,17 @@ class AuthController extends GetxController {
         .doc(finalUID)
         .set(expense.toJson());
     amountController.clear();
+  }
+
+  Future<void> deleteExpenses(String finalUID) async {
+    final finalUID = DateTime.now().millisecondsSinceEpoch.toString();
+
+    await _firestore
+        .collection("user")
+        .doc(_auth.currentUser!.uid)
+        .collection("expenses")
+        .doc(finalUID)
+        .delete();
+    print("after calling funtion $finalUID");
   }
 }

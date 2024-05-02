@@ -70,6 +70,13 @@ class ExpensePage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final expenses = authController.expensesList[index];
                     return ExpenseCard(
+                        ontap: () {
+                          final finalUID =
+                              DateTime.now().millisecondsSinceEpoch.toString();
+
+                          authController.deleteExpenses(finalUID);
+                          print(finalUID);
+                        },
                         expensesModel: expenses,
                         money: expenses.expenses.toString());
                   },

@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 class ExpenseCard extends StatelessWidget {
   final String money;
   final ExpensesModel expensesModel;
-  const ExpenseCard(
-      {super.key, required this.money, required this.expensesModel});
+  final VoidCallback ontap;
+  const ExpenseCard({
+    super.key,
+    required this.money,
+    required this.expensesModel,
+    required this.ontap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,7 @@ class ExpenseCard extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: ontap,
                       icon: const Icon(
                         Icons.delete_outline_outlined,
                         color: Colors.black,
