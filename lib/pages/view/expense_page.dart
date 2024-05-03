@@ -1,5 +1,6 @@
 import 'package:expense_calculator/pages/controller/add_expense_dialog_box.dart';
 import 'package:expense_calculator/pages/controller/edit_expenses_dialog_box.dart';
+import 'package:expense_calculator/pages/controller/tag_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:expense_calculator/pages/controller/auth_controller.dart';
@@ -15,6 +16,7 @@ class ExpensePage extends StatelessWidget {
         Get.put(AddExpenseController());
     final EditExpenseController editExpenseController =
         Get.put(EditExpenseController());
+    final TagController tagController = Get.put(TagController());
 
     return Scaffold(
       appBar: AppBar(
@@ -69,31 +71,33 @@ class ExpensePage extends StatelessWidget {
               thickness: 4,
             ),
             // Display expenses using ListView.builder
-            Obx(() => ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: authController.expensesList.length,
-                  itemBuilder: (context, index) {
-                    final expenses = authController.expensesList[index];
-                    return ExpenseCard(
-                            onedit: () {
-                              // edit funtion
+            Obx(
+              () => ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: authController.expensesList.length,
+                itemBuilder: (context, index) {
+                  final expenses = authController.expensesList[index];
+                  return ExpenseCard(
+                          onedit: () {
+                            // edit funtion
 
-                              editExpenseController.editexpensedialog(
-                                  expensesModel: expenses);
-                            },
-                            ontap: () {
-                              // delete funtion
-                              var expenseId = expenses.expenseID;
+                            editExpenseController.editexpensedialog(
+                                expensesModel: expenses);
+                          },
+                          ontap: () {
+                            // delete funtion
+                            var expenseId = expenses.expenseID;
 
-                              authController.deleteExpenses(
-                                  finalUID: expenseId.toString());
-                            },
-                            expensesModel: expenses,
-                            money: expenses.expenses.toString())
-                        .marginAll(10);
-                  },
-                )),
+                            authController.deleteExpenses(
+                                finalUID: expenseId.toString());
+                          },
+                          expensesModel: expenses,
+                          money: expenses.expenses.toString())
+                      .marginAll(10);
+                },
+              ),
+            ),
           ],
         ),
       ),

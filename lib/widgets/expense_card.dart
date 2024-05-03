@@ -1,7 +1,7 @@
 import 'package:expense_calculator/model/expense_model.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseCard extends StatelessWidget {
+class ExpenseCard extends StatefulWidget {
   final String money;
   final ExpensesModel expensesModel;
   final VoidCallback ontap;
@@ -14,6 +14,11 @@ class ExpenseCard extends StatelessWidget {
     required this.onedit,
   });
 
+  @override
+  State<ExpenseCard> createState() => _ExpenseCardState();
+}
+
+class _ExpenseCardState extends State<ExpenseCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,7 +37,7 @@ class ExpenseCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    money,
+                    widget.money,
                     style: const TextStyle(
                         fontSize: 34,
                         color: Colors.black,
@@ -42,7 +47,7 @@ class ExpenseCard extends StatelessWidget {
                     children: [
                       // delte button
                       IconButton(
-                          onPressed: ontap,
+                          onPressed: widget.ontap,
                           icon: const Icon(
                             Icons.delete_outline_outlined,
                             color: Colors.black,
@@ -50,14 +55,14 @@ class ExpenseCard extends StatelessWidget {
                           )),
                       // edit button
                       IconButton(
-                          onPressed: onedit,
+                          onPressed: widget.onedit,
                           icon: const Icon(
                             Icons.edit_outlined,
                             color: Colors.black,
                             size: 38,
                           )),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

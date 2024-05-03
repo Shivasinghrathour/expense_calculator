@@ -18,10 +18,10 @@ class ExpensesModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["expenses"] = expenses;
-    _data["userName"] = userName;
-    _data["expenseID"] = expenseID;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["expenses"] = expenses;
+    data["userName"] = userName;
+    data["expenseID"] = expenseID;
+    return data;
   }
 }
