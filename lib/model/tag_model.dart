@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // model for tags it contains tagid, tagName and tagcolor also.
 class Tag {
@@ -10,9 +11,10 @@ class Tag {
 
 // list of predefine tags
 
-List<Tag> predefinedTags = [
+RxList<Tag> predefinedTags = [
   Tag(tagColor: Colors.red, tagName: "Food"),
   Tag(tagColor: Colors.green, tagName: "Grosery"),
   Tag(tagColor: Colors.blue, tagName: "Amazon Prime"),
   Tag(tagColor: Colors.deepOrange, tagName: "Netflix"),
-];
+  Tag(tagColor: Colors.yellowAccent, tagName: "Entertainment"),
+].obs;
