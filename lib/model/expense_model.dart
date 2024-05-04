@@ -1,9 +1,15 @@
+import 'package:expense_calculator/model/tag_model.dart';
+
 class ExpensesModel {
   String? expenses;
   String? userName;
   String? expenseID;
 
-  ExpensesModel({this.expenses, this.userName, this.expenseID});
+  ExpensesModel({
+    this.expenses,
+    this.userName,
+    this.expenseID,
+  });
 
   ExpensesModel.fromJson(Map<String, dynamic> json) {
     if (json["expenses"] is String) {
@@ -22,6 +28,7 @@ class ExpensesModel {
     data["expenses"] = expenses;
     data["userName"] = userName;
     data["expenseID"] = expenseID;
+
     return data;
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_calculator/model/expense_model.dart';
+import 'package:expense_calculator/model/tag_model.dart';
 import 'package:expense_calculator/pages/auth/login_page.dart';
+import 'package:expense_calculator/pages/controller/add_expense_dialog_box.dart';
 import 'package:expense_calculator/pages/view/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +11,12 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
+  Tag? tag;
   var uuid = const Uuid();
   final ExpensesModel exp = Get.put(ExpensesModel());
   Rx<ExpensesModel> expensesModel = ExpensesModel().obs;
-
+  final AddExpenseController addExpenseController =
+      Get.put(AddExpenseController());
   // RxList<ExpensesModel> expensesList = <ExpensesModel>[].obs;
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
@@ -38,46 +42,9 @@ class AuthController extends GetxController {
     email.clear();
     pass.clear();
   }
-  // store user data
-
-  // Future<void> addExpenses() async {
-  //   var finalUID = DateTime.now().millisecond;
-  //   var expensesModel = ExpensesModel(
-  //     expenses: amountController.text,
-  //     userName: user.text,
-  //   );
-  //   print("Adding expenses: ${expensesModel.expenses}");
-  //   await firestore
-  //       .collection("user")
-  //       .doc(auth.currentUser!.uid)
-  //       .collection("expenses")
-  //       .doc(finalUID.toString())
-  //       .set(expensesModel.toJson());
-
-  //   expensesList.add(expensesModel);
-  //   amountController.clear();
-
-  //   print("Expenses list before adding: ${expensesList}");
-  //   print("Expenses list after adding: ${expensesList}");
-  // }
 
   StreamSubscription? subscription;
 
-// Stream to listen for changes in expenses collection
-  // Stream<List<ExpensesModel>> getExpenses() {
-  //   return firestore
-  //       .collection("user")
-  //       .doc(auth.currentUser!.uid)
-  //       .collection("expenses")
-  //       .snapshots()
-  //       .map((snapshot) => snapshot.docs
-  //           .map((doc) => ExpensesModel.fromJson(doc.data()))
-  //           .toList())
-  //       .handleError((error) {
-  //     print("Error fetching expenses: $error");
-  //     // Handle errors if any
-  //   });
-  // }
   // functon for sum expenses of user
 
   double calculateTotalExpenses() {
@@ -91,24 +58,6 @@ class AuthController extends GetxController {
     // getExpenses();
     return total;
   }
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   // Subscribe to the expenses stream
-  //   subscription = getExpenses().listen((expenses) {
-  //     // Update the expenses list
-  //     expensesList.assignAll(expenses);
-  //   });
-  // }
-
-  // @override
-  // void onClose() {
-  //   // Cancel the subscription when the controller is closed
-  //   subscription?.cancel();
-  //   super.onClose();
-  // }
-  // new
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -155,7 +104,9 @@ class AuthController extends GetxController {
       expenses: amountController.text,
       userName: user.text,
       expenseID: DateTime.now().millisecondsSinceEpoch.toString(),
+      // tags: addExpenseController.selectedTag.value,
     );
+
     print("Adding expense: ${expense.expenses}");
     await _firestore
         .collection("user")
@@ -164,6 +115,7 @@ class AuthController extends GetxController {
         .doc(finalUID)
         .set(expense.toJson());
     amountController.clear();
+    //  print("${addExpenseController.selectedTag.value}");
   }
 // delete expenses
 

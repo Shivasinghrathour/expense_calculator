@@ -27,7 +27,7 @@ class EditExpenseController extends GetxController {
             onPressed: () {
               Get.back();
             },
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
           ),
           TextButton(
             onPressed: () {
@@ -35,7 +35,7 @@ class EditExpenseController extends GetxController {
                   finalUID: expensesModel.expenseID.toString(),
                   expenseModel: expensesModel);
             },
-            child: Text("Edit"),
+            child: const Text("Edit"),
           ),
         ]);
   }

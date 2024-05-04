@@ -15,9 +15,9 @@ class HomePage extends StatelessWidget {
         actions: [
           ElevatedButton(
               onPressed: () {
-                Get.to(ExpensePage());
+                Get.to(const ExpensesPage());
               },
-              child: Text("Add Expenses"))
+              child: const Text("Add Expenses"))
         ],
         centerTitle: true,
         title: const Text("Expense Traker Application"),

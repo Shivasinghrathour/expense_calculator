@@ -1,34 +1,38 @@
 import 'package:expense_calculator/pages/controller/add_expense_dialog_box.dart';
+import 'package:expense_calculator/pages/controller/auth_controller.dart';
 import 'package:expense_calculator/pages/controller/edit_expenses_dialog_box.dart';
-import 'package:expense_calculator/pages/controller/tag_controller.dart';
+import 'package:expense_calculator/pages/view/stats.dart';
+import 'package:expense_calculator/widgets/expense_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:expense_calculator/pages/controller/auth_controller.dart';
-import 'package:expense_calculator/widgets/expense_card.dart';
 
-class ExpensePage extends StatelessWidget {
-  const ExpensePage({Key? key}) : super(key: key);
+class ExpensesPage extends StatelessWidget {
+  const ExpensesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = Get.put(AuthController());
-    final AddExpenseController addExpenseController =
-        Get.put(AddExpenseController());
-    final EditExpenseController editExpenseController =
+    AuthController authController = Get.put(AuthController());
+    AddExpenseController addExpenseController = Get.put(AddExpenseController());
+    EditExpenseController editExpenseController =
         Get.put(EditExpenseController());
-    final TagController tagController = Get.put(TagController());
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Your Expenses"),
         backgroundColor: Colors.deepPurple,
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Get.to(() => const Stats());
+              },
+              icon: const Icon(Icons.add)),
+        ],
       ),
       floatingActionButton: FloatingActionButton.large(
         onPressed: () {
           // Call dialog box to add expense
           // Assuming you have a method in your AuthController to show the add expense dialog
           addExpenseController.addExpenseDialogBox();
+
           authController.amountController.clear();
         },
         child: const Icon(

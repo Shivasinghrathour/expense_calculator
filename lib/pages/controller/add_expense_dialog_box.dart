@@ -1,18 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:expense_calculator/model/tag_model.dart';
 import 'package:expense_calculator/pages/controller/auth_controller.dart';
 
 class AddExpenseController extends GetxController {
-  final AuthController authController = Get.find();
+  AuthController authController = Get.put(AuthController());
 
-  Tag? _selectedTag;
-  Tag? get selectedTag => _selectedTag;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  // Define selectedTag as an Rx variable
+  Rx<Tag?> selectedTag = Rx<Tag?>(null);
+
+  // Function to set the selected tag
   void setSelectedTag(Tag? tag) {
-    _selectedTag = tag;
-    update();
+    selectedTag.value = tag;
   }
+  // tag add to firestore
 
   final TextEditingController amountController = TextEditingController();
 
@@ -34,16 +38,18 @@ class AddExpenseController extends GetxController {
               ),
             ),
           ),
+          // Obx to listen for changes in selectedTag
           Obx(
             () => DropdownButton<Tag>(
               hint: const Padding(
                 padding: EdgeInsets.all(15),
                 child: Text("Select Tags"),
               ),
-              value: selectedTag,
+              value: selectedTag.value,
               items: predefinedTags.map((Tag tag) {
                 return DropdownMenuItem<Tag>(
                   onTap: () {
+                    // Call setSelectedTag to update selectedTag when a tag is selected
                     setSelectedTag(tag);
                     print("${tag.tagName}");
                   },
@@ -71,6 +77,7 @@ class AddExpenseController extends GetxController {
       contentPadding: const EdgeInsets.all(25),
       confirm: ElevatedButton(
         onPressed: () {
+          // Pass selectedTag to addExpenses function
           authController.addExpenses();
           Get.back();
         },
