@@ -51,10 +51,8 @@ class AddExpenseController extends GetxController {
               items: predefinedTags.map((Tag tag) {
                 return DropdownMenuItem<Tag>(
                   onTap: () {
-                    // Call setSelectedTag to update selectedTag when a tag is selected
-                    setSelectedTag(tag);
-
-                    print("${tag.tagName}");
+                    tagController.selectedTag.value = tag;
+                    tagController.selectedTag.refresh();
                   },
                   value: tag,
                   child: Row(
