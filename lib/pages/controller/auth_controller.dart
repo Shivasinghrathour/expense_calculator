@@ -6,20 +6,20 @@ import 'package:expense_calculator/pages/auth/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
+  final uuid = const Uuid();
   final TextEditingController email = TextEditingController();
   final TextEditingController pass = TextEditingController();
   final TextEditingController user = TextEditingController();
   Rx<ExpensesModel> expensesModel = ExpensesModel().obs;
-  Rx<Tag?> selectedTag = Rx<Tag?>(null);
+  RxList<ExpensesModel> tagsList = <ExpensesModel>[].obs;
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
   final TextEditingController editexpense = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-
-  StreamSubscription? subscription;
 
   RxList<ExpensesModel> expensesList = <ExpensesModel>[].obs;
 
@@ -74,10 +74,10 @@ class AuthController extends GetxController {
 
   Future<void> addExpenses() async {
     final expenseID = DateTime.now().millisecondsSinceEpoch.toString();
+
     final expense = ExpensesModel(
-      expenses: amountController.text,
-      userName: user.text,
       expenseID: expenseID,
+      expenses: amountController.text,
     );
 
     print("Adding expense: ${expense.expenses}");
@@ -90,7 +90,10 @@ class AuthController extends GetxController {
     amountController.clear();
   }
 
-  Future<void> deleteExpenses({required String expenseID}) async {
+  Future<void> deleteExpenses({
+    required String expenseID,
+    required ExpensesModel expensesModel,
+  }) async {
     await _firestore
         .collection("user")
         .doc(_auth.currentUser!.uid)
@@ -107,25 +110,6 @@ class AuthController extends GetxController {
         .doc(_auth.currentUser!.uid)
         .collection("expenses")
         .doc(expenseID)
-        .update({
-      "expenses": editexpense.text,
-    });
-    print("Expense edited: $expenseID");
-  }
-
-// add tags to firestore
-  Future<void> addTagToFirestore(Tag tag) async {
-    final tagID = DateTime.now().millisecondsSinceEpoch.toString();
-    final expense = ExpensesModel(
-      tags: selectedTag.value!.tagName,
-      tagID: tagID,
-    );
-    await _firestore
-        .collection("user")
-        .doc(_auth.currentUser!.uid)
-        .collection("tags")
-        .doc(tagID)
-        .set(expense.toJson());
-    amountController.clear();
+        .update({"expenses": editexpense.text});
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expense_calculator/pages/controller/tag_controller.dart';
 import 'package:expense_calculator/pages/view/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,7 @@ class AddExpenseController extends GetxController {
   // tag add to firestore
 
   final TextEditingController amountController = TextEditingController();
-
+  final TagController tagController = Get.put(TagController());
   void addExpenseDialogBox() async {
     await Get.defaultDialog(
       title: "Add Expense",
@@ -46,7 +47,7 @@ class AddExpenseController extends GetxController {
                 padding: EdgeInsets.all(15),
                 child: Text("Select Tags"),
               ),
-              value: authController.selectedTag.value,
+              value: tagController.selectedTag.value,
               items: predefinedTags.map((Tag tag) {
                 return DropdownMenuItem<Tag>(
                   onTap: () {
@@ -70,8 +71,8 @@ class AddExpenseController extends GetxController {
                 );
               }).toList(),
               onChanged: (Tag? tag) {
-                authController.selectedTag.value = tag!;
-                authController.selectedTag.refresh();
+                tagController.selectedTag.value = tag!;
+                tagController.selectedTag.refresh();
               },
             ),
           )
@@ -82,7 +83,9 @@ class AddExpenseController extends GetxController {
         onPressed: () {
           // Pass selectedTag to addExpenses function
           authController.addExpenses();
-          authController.addTagToFirestore(selectedTag.value!);
+          tagController.addTag();
+          tagController.getTagData();
+
           Get.back();
         },
         child: const Padding(

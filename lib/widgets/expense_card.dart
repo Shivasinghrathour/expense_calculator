@@ -1,3 +1,4 @@
+import 'package:expense_calculator/model/add_tag_model.dart';
 import 'package:expense_calculator/model/expense_model.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +7,15 @@ class ExpenseCard extends StatefulWidget {
   final ExpensesModel expensesModel;
   final VoidCallback ontap;
   final VoidCallback onedit;
+  final String tag;
+
   const ExpenseCard({
     super.key,
     required this.money,
     required this.expensesModel,
     required this.ontap,
     required this.onedit,
+    required this.tag,
   });
 
   @override
@@ -38,6 +42,13 @@ class _ExpenseCardState extends State<ExpenseCard> {
                 children: [
                   Text(
                     widget.money,
+                    style: const TextStyle(
+                        fontSize: 34,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    widget.tag,
                     style: const TextStyle(
                         fontSize: 34,
                         color: Colors.black,
