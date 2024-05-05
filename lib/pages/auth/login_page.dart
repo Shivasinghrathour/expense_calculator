@@ -1,4 +1,4 @@
-import 'package:expense_calculator/pages/controller/auth_controller.dart';
+import 'package:expense_calculator/pages/controller/authantication_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +7,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.put(AuthController());
+    final Authentication authentication = Get.put(Authentication());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
@@ -26,14 +26,14 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             TextFormField(
-              controller: authController.email,
+              controller: authentication.email,
               decoration: const InputDecoration(
                 hintText: "Email",
               ),
             ),
             const SizedBox(height: 20),
             TextFormField(
-              controller: authController.pass,
+              controller: authentication.pass,
               decoration: const InputDecoration(
                 hintText: "Password",
               ),
@@ -41,12 +41,12 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
                 onPressed: () {
-                  authController.login();
+                  authentication.login();
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    "Sign up",
+                    "Login",
                     style: TextStyle(fontSize: 22),
                   ),
                 ))

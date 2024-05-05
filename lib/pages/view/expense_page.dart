@@ -40,45 +40,43 @@ class ExpensesPage extends StatelessWidget {
           size: 50,
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical, // Set scroll direction to vertical
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 40),
-            const Text(
-              "Total Expenses",
-              style: TextStyle(fontSize: 38),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.deepPurple[200],
-                  borderRadius: BorderRadius.circular(14)),
-              child: Obx(() => Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      "${authController.calculateTotalExpenses()}",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 80,
-                        fontWeight: FontWeight.bold,
-                      ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 40),
+          const Text(
+            "Total Expenses",
+            style: TextStyle(fontSize: 38),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.deepPurple[200],
+                borderRadius: BorderRadius.circular(14)),
+            child: Obx(() => Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    "${authController.calculateTotalExpenses()}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 80,
+                      fontWeight: FontWeight.bold,
                     ),
-                  )),
-            ),
-            const Divider(
-              color: Colors.white,
-              height: 50,
-              indent: 25,
-              endIndent: 25,
-              thickness: 4,
-            ),
-            // Display expenses using ListView.builder
-            Obx(
-              () => ListView.builder(
+                  ),
+                )),
+          ),
+          const Divider(
+            color: Colors.white,
+            height: 50,
+            indent: 25,
+            endIndent: 25,
+            thickness: 4,
+          ),
+          // Display expenses using ListView.builder
+          Obx(
+            () => Expanded(
+              child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                shrinkWrap: true,
                 itemCount: authController.expensesList.length,
                 itemBuilder: (context, index) {
                   final expenses = authController.expensesList[index];
@@ -94,7 +92,8 @@ class ExpensesPage extends StatelessWidget {
                             var expenseId = expenses.expenseID;
 
                             authController.deleteExpenses(
-                                finalUID: expenseId.toString());
+                                expenseID: expenseId!);
+                            print(expenseId);
                           },
                           expensesModel: expenses,
                           money: expenses.expenses.toString())
@@ -102,8 +101,8 @@ class ExpensesPage extends StatelessWidget {
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -32,7 +32,7 @@ class EditExpenseController extends GetxController {
           TextButton(
             onPressed: () {
               authController.editExpenses(
-                  finalUID: expensesModel.expenseID.toString(),
+                  expenseID: expensesModel.expenseID.toString(),
                   expenseModel: expensesModel);
             },
             child: const Text("Edit"),

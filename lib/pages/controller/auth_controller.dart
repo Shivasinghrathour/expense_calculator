@@ -3,48 +3,49 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_calculator/model/expense_model.dart';
 import 'package:expense_calculator/model/tag_model.dart';
 import 'package:expense_calculator/pages/auth/login_page.dart';
-import 'package:expense_calculator/pages/controller/add_expense_dialog_box.dart';
-import 'package:expense_calculator/pages/view/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
 
 class AuthController extends GetxController {
-  Tag? tag;
-  var uuid = const Uuid();
-  final ExpensesModel exp = Get.put(ExpensesModel());
+  final TextEditingController email = TextEditingController();
+  final TextEditingController pass = TextEditingController();
+  final TextEditingController user = TextEditingController();
   Rx<ExpensesModel> expensesModel = ExpensesModel().obs;
-  final AddExpenseController addExpenseController =
-      Get.put(AddExpenseController());
-  // RxList<ExpensesModel> expensesList = <ExpensesModel>[].obs;
-  TextEditingController email = TextEditingController();
-  TextEditingController pass = TextEditingController();
-  TextEditingController user = TextEditingController();
-  TextEditingController editexpense = TextEditingController();
+  Rx<Tag?> selectedTag = Rx<Tag?>(null);
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
+  final TextEditingController editexpense = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final auth = FirebaseAuth.instance;
-  final firestore = FirebaseFirestore.instance;
-
-  Future<void> signup() async {
-    await auth.createUserWithEmailAndPassword(
-        email: email.text, password: pass.text);
-    email.clear();
-    pass.clear();
-    Get.to(() => const LoginPage());
-  }
-
-  Future<void> login() async {
-    await auth.signInWithEmailAndPassword(
-        email: email.text, password: pass.text);
-
-    Get.to(() => const HomePage());
-    email.clear();
-    pass.clear();
-  }
 
   StreamSubscription? subscription;
 
+  RxList<ExpensesModel> expensesList = <ExpensesModel>[].obs;
+
+  StreamSubscription? _subscription;
+
+  Future<void> currentuser() async {
+    _auth.authStateChanges().listen((event) {
+      if (event != null) {
+        _subscription = _firestore
+            .collection("user")
+            .doc(_auth.currentUser!.uid)
+            .collection("expenses")
+            .snapshots()
+            .listen((snapshot) {
+          expensesList.clear();
+          final expenses = snapshot.docs
+              .map((doc) => ExpensesModel.fromJson(doc.data()))
+              .toList();
+          expensesList.assignAll(expenses);
+        });
+      } else {
+        expensesList.clear();
+        Get.to(() => const LoginPage());
+      }
+    });
+  }
   // functon for sum expenses of user
 
   double calculateTotalExpenses() {
@@ -57,33 +58,6 @@ class AuthController extends GetxController {
     print('Total expenses: $total');
     // getExpenses();
     return total;
-  }
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  RxList<ExpensesModel> expensesList = <ExpensesModel>[].obs;
-
-  StreamSubscription? _subscription;
-
-  Future<void> currentuser() async {
-    auth.authStateChanges().listen((event) {
-      if (event != null) {
-        _subscription = _firestore
-            .collection("user")
-            .doc(_auth.currentUser!.uid)
-            .collection("expenses")
-            .snapshots()
-            .listen((snapshot) {
-          final expenses = snapshot.docs
-              .map((doc) => ExpensesModel.fromJson(doc.data()))
-              .toList();
-          expensesList.assignAll(expenses);
-        });
-      } else {
-        Get.to(() => const LoginPage());
-      }
-    });
   }
 
   @override
@@ -99,12 +73,11 @@ class AuthController extends GetxController {
   }
 
   Future<void> addExpenses() async {
-    final finalUID = DateTime.now().millisecondsSinceEpoch.toString();
+    final expenseID = DateTime.now().millisecondsSinceEpoch.toString();
     final expense = ExpensesModel(
       expenses: amountController.text,
       userName: user.text,
-      expenseID: DateTime.now().millisecondsSinceEpoch.toString(),
-      // tags: addExpenseController.selectedTag.value,
+      expenseID: expenseID,
     );
 
     print("Adding expense: ${expense.expenses}");
@@ -112,34 +85,47 @@ class AuthController extends GetxController {
         .collection("user")
         .doc(_auth.currentUser!.uid)
         .collection("expenses")
-        .doc(finalUID)
+        .doc(expenseID)
         .set(expense.toJson());
     amountController.clear();
-    //  print("${addExpenseController.selectedTag.value}");
   }
-// delete expenses
 
-  Future<void> deleteExpenses({required String finalUID}) async {
+  Future<void> deleteExpenses({required String expenseID}) async {
     await _firestore
         .collection("user")
-        .doc(auth.currentUser!.uid)
+        .doc(_auth.currentUser!.uid)
         .collection("expenses")
-        .doc(finalUID)
+        .doc(expenseID)
         .delete();
-    print("after calling funtion $finalUID");
+    print("Expense deleted: $expenseID");
   }
 
-  // edit expenses
   Future<void> editExpenses(
-      {required String finalUID, required ExpensesModel expenseModel}) async {
+      {required String expenseID, required ExpensesModel expenseModel}) async {
     await _firestore
         .collection("user")
-        .doc(auth.currentUser!.uid)
+        .doc(_auth.currentUser!.uid)
         .collection("expenses")
-        .doc(finalUID)
+        .doc(expenseID)
         .update({
       "expenses": editexpense.text,
     });
-    print("after calling funtion $finalUID");
+    print("Expense edited: $expenseID");
+  }
+
+// add tags to firestore
+  Future<void> addTagToFirestore(Tag tag) async {
+    final tagID = DateTime.now().millisecondsSinceEpoch.toString();
+    final expense = ExpensesModel(
+      tags: selectedTag.value!.tagName,
+      tagID: tagID,
+    );
+    await _firestore
+        .collection("user")
+        .doc(_auth.currentUser!.uid)
+        .collection("tags")
+        .doc(tagID)
+        .set(expense.toJson());
+    amountController.clear();
   }
 }

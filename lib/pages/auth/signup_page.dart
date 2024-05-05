@@ -1,5 +1,6 @@
 import 'package:expense_calculator/pages/auth/login_page.dart';
 import 'package:expense_calculator/pages/controller/auth_controller.dart';
+import 'package:expense_calculator/pages/controller/authantication_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,18 +9,18 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.put(AuthController());
+    Authentication authentication = Get.put(Authentication());
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign Up "),
+        title: const Text("Sign Up "),
         backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Column(
           children: [
-            SizedBox(height: 40),
-            Center(
+            const SizedBox(height: 40),
+            const Center(
               child: Text(
                 "Create an account",
                 style: TextStyle(fontSize: 40),
@@ -27,31 +28,31 @@ class SignupPage extends StatelessWidget {
               ),
             ),
             TextFormField(
-              controller: authController.user,
-              decoration: InputDecoration(
+              controller: authentication.user,
+              decoration: const InputDecoration(
                 hintText: "User Name",
               ),
             ),
             TextFormField(
-              controller: authController.email,
-              decoration: InputDecoration(
+              controller: authentication.email,
+              decoration: const InputDecoration(
                 hintText: "Email",
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextFormField(
-              controller: authController.pass,
-              decoration: InputDecoration(
+              controller: authentication.pass,
+              decoration: const InputDecoration(
                 hintText: "Password",
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: () {
-                authController.signup();
+              onPressed: () async {
+                await authentication.signup();
               },
-              child: Padding(
-                padding: const EdgeInsets.all(10),
+              child: const Padding(
+                padding: EdgeInsets.all(10),
                 child: Text(
                   "Sign up",
                   style: TextStyle(fontSize: 22),
@@ -60,9 +61,9 @@ class SignupPage extends StatelessWidget {
             ),
             TextButton(
                 onPressed: () {
-                  Get.to(LoginPage());
+                  Get.to(const LoginPage());
                 },
-                child: Text("Login")),
+                child: const Text("Login")),
           ],
         ),
       ),
