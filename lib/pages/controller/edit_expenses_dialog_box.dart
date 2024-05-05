@@ -1,3 +1,4 @@
+import 'package:expense_calculator/model/add_tag_model.dart';
 import 'package:expense_calculator/model/expense_model.dart';
 import 'package:expense_calculator/model/tag_model.dart';
 import 'package:expense_calculator/pages/controller/auth_controller.dart';
@@ -10,7 +11,8 @@ class EditExpenseController extends GetxController {
   final ExpensesModel expensesModel = Get.put(ExpensesModel());
   final TagController tagController = Get.put(TagController());
 
-  void editexpensedialog({required ExpensesModel expensesModel}) {
+  void editexpensedialog(
+      {required ExpensesModel expensesModel, required AddTagModel tagModel}) {
     Get.defaultDialog(
         title: "Edit Expense",
         content: Column(
@@ -39,8 +41,6 @@ class EditExpenseController extends GetxController {
                     onTap: () {
                       // Call setSelectedTag to update selectedTag when a tag is selected
                       // setSelectedTag(tag);
-
-                      print("${tag.tagName}");
                     },
                     value: tag,
                     child: Row(
@@ -74,8 +74,13 @@ class EditExpenseController extends GetxController {
           TextButton(
             onPressed: () {
               authController.editExpenses(
-                  expenseID: expensesModel.expenseID.toString(),
-                  expenseModel: expensesModel);
+                expenseID: expensesModel.expenseID.toString(),
+                expenseModel: expensesModel,
+              );
+              tagController.editTag(
+                tagID: tagModel.tagId!,
+                tagName: tagController.selectedTag.value!.tagName,
+              );
             },
             child: const Text("Edit"),
           ),

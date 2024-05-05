@@ -1,4 +1,3 @@
-import 'package:expense_calculator/model/add_tag_model.dart';
 import 'package:expense_calculator/pages/controller/add_expense_dialog_box.dart';
 import 'package:expense_calculator/pages/controller/auth_controller.dart';
 import 'package:expense_calculator/pages/controller/edit_expenses_dialog_box.dart';
@@ -20,7 +19,6 @@ class ExpensesPage extends StatelessWidget {
 
     TagController tagController = Get.put(TagController());
 
-    AddTagModel? addTagModel;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Your Expenses"),
@@ -79,43 +77,51 @@ class ExpensesPage extends StatelessWidget {
             thickness: 4,
           ),
           // Display expenses using ListView.builder
-          Obx(
-            () => Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: authController.expensesList.length,
-                itemBuilder: (context, index) {
-                  final expenses = authController.expensesList[index];
-                  final tag = tagController.taglist[index];
+          Obx(() => authController.expensesList.isNotEmpty &&
+                  tagController.taglist.isNotEmpty
+              ? Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: authController.expensesList.length,
+                    itemBuilder: (context, index) {
+                      final expenses = authController.expensesList[index];
+                      final tag = tagController.taglist[index];
 
-                  return ExpenseCard(
-                          tag: tag.tagname!,
-                          
-                          onedit: () {
-                            // edit funtion
+                      return ExpenseCard(
+                              tag: tag.tagname!,
+                              onedit: () {
+                                // edit funtion
 
-                            editExpenseController.editexpensedialog(
-                                expensesModel: expenses);
-                          },
-                          ontap: () {
-                            // delete funtion
+                                editExpenseController.editexpensedialog(
+                                  expensesModel: expenses,
+                                  tagModel: tag,
+                                );
+                              },
+                              ontap: () async {
+                                // delete funtion
+                                await authController.deleteExpenses(
+                                  expenseID: expenses.expenseID!,
+                                  expensesModel: expenses,
+                                );
 
-                            authController.deleteExpenses(
-                                expenseID: expenses.expenseID!,
-                                expensesModel: expenses);
+                                await tagController.deleteTag(
+                                  tagID: tag.tagId!,
+                                );
 
-                            // delete tag function
+                                // delete tag function
 
-                            // var tagid = expenses.tagID;
-                            // authController.deleteTag(tagID: tagid!);
-                          },
-                          expensesModel: expenses,
-                          money: expenses.expenses.toString())
-                      .marginAll(10);
-                },
-              ),
-            ),
-          ),
+                                // var tagid = expenses.tagID;
+                                // authController.deleteTag(tagID: tagid!);
+                              },
+                              expensesModel: expenses,
+                              money: expenses.expenses.toString())
+                          .marginAll(10);
+                    },
+                  ),
+                )
+              : authController.expensesList.isEmpty
+                  ? const Text("No Data Right Now")
+                  : const CircularProgressIndicator()),
         ],
       ),
     );

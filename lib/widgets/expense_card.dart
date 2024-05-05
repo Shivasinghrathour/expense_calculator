@@ -1,4 +1,3 @@
-import 'package:expense_calculator/model/add_tag_model.dart';
 import 'package:expense_calculator/model/expense_model.dart';
 import 'package:flutter/material.dart';
 
@@ -47,12 +46,16 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    widget.tag,
-                    style: const TextStyle(
+                  Expanded(
+                    child: Text(
+                      widget.tag,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
                         fontSize: 34,
                         color: Colors.black,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   Row(
                     children: [
