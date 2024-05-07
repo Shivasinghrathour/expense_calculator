@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_calculator/model/add_tag_model.dart';
 import 'package:expense_calculator/model/tag_model.dart';
