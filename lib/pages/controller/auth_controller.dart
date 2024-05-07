@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_calculator/model/expense_model.dart';
-import 'package:expense_calculator/model/tag_model.dart';
 import 'package:expense_calculator/pages/auth/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
